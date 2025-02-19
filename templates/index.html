@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastodon API Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <input type="text" id="statusInput" placeholder="Enter status update">
+    <button onclick="createPost()">Post</button>
+    <button onclick="retrievePost()">Retrieve</button>
+    <button onclick="deletePost()">Delete</button>
+    <div id="postDisplay"></div>
+
+    <script>
+        function createPost() {
+    const content = document.getElementById('statusInput').value;
+    fetch('/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ content: content })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('postDisplay').innerText = `Post created with ID: ${data.id}`;
+    });
+}
+        function retrievePost() {
+            const postId = prompt("Enter Post ID to retrieve:");
+            fetch(`/retrieve/${postId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('postDisplay').innerText = JSON.stringify(data);
+            });
+        }
+
+        function deletePost() {
+            const postId = prompt("Enter Post ID to delete:");
+            fetch(`/delete/${postId}`, { method: 'DELETE' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('postDisplay').innerText = JSON.stringify(data);
+            });
+        }
+    </script>
+</body>
+</html>
