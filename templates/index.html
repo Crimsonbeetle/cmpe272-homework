@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,34 +15,60 @@
 
     <script>
         function createPost() {
-    const content = document.getElementById('statusInput').value;
-    fetch('/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ content: content })
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('postDisplay').innerText = `Post created with ID: ${data.id}`;
-    });
-}
-        function retrievePost() {
-            const postId = prompt("Enter Post ID to retrieve:");
-            fetch(`/retrieve/${postId}`)
+            const content = document.getElementById('statusInput').value;
+            fetch('/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: content })
+            })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('postDisplay').innerText = JSON.stringify(data);
+                console.log(data); // Log the response to see its structure
+                if (data.id) {
+                    document.getElementById('postDisplay').innerText = `Post created with ID: ${data.id}`;
+                } else {
+                    document.getElementById('postDisplay').innerText = 'Error: Post ID not found';
+                }
+            })
+            .catch(error => {
+                console.error('Error creating post:', error);
+                document.getElementById('postDisplay').innerText = 'Error creating post';
             });
         }
 
+        function retrievePost() {
+    const postId = prompt("Enter Post ID to retrieve:");
+    fetch(`/retrieve/${postId}`)
+    .then(response => response.json())
+    .then(data => {
+        // Extract and clean the content
+        const content = data.content.replace(/<[^>]*>/g, ''); // Remove HTML tags
+
+        // Parse and format the timestamp
+        const date = new Date(data.created_at);
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
+        const formattedDate = date.toLocaleString('en-US', options);
+
+        document.getElementById('postDisplay').innerText = `Message: ${content}\nDate: ${formattedDate}`;
+    })
+    .catch(error => {
+        console.error('Error retrieving post:', error);
+        document.getElementById('postDisplay').innerText = 'Error retrieving post';
+    });
+}
         function deletePost() {
             const postId = prompt("Enter Post ID to delete:");
             fetch(`/delete/${postId}`, { method: 'DELETE' })
             .then(response => response.json())
             .then(data => {
+                console.log(data); // Log the response
                 document.getElementById('postDisplay').innerText = JSON.stringify(data);
+            })
+            .catch(error => {
+                console.error('Error deleting post:', error);
+                document.getElementById('postDisplay').innerText = 'Error deleting post';
             });
         }
     </script>
