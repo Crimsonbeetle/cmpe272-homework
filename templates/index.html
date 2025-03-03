@@ -1,3 +1,4 @@
+<!-- /* #Below part of the code was contributed by Abdul Muqtadir Mohammed */ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,7 +59,7 @@
         document.getElementById('postDisplay').innerText = 'Error retrieving post';
     });
 }
-function deletePost() {
+function delPost() {
     const postId = prompt("Enter Post ID to delete:");
     fetch(`/delete/${postId}`, { method: 'DELETE' })
     .then(response => response.json())
