@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from mastodon_service import create_post, retrieve_post, delete_post
 from flask import Flask, request, jsonify, render_template
-#Below part of the code was contributed by Deven Desai
+#Below part of the code was contributed by Deven Desai.
 app = Flask(__name__)
 
 @app.route('/')

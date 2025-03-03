@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import requests
-# Deven Desai have contributed for below part of the code
+# Deven Desai have contributed for below part of the code.
 # Load environment variables from .env file
 load_dotenv()
 
